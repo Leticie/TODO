@@ -6,7 +6,14 @@ import CheckIcon from "@mui/icons-material/Check";
 
 export const MenuBar = () => {
   return (
-    <Box sx={{ backgroundColor: "#B5D3FE", borderTopRightRadius: 3, borderTopLeftRadius: 3 }}>
+    <Box
+      sx={{
+        backgroundColor: "#B5D3FE",
+        borderTopRightRadius: 3,
+        borderTopLeftRadius: 3,
+        border: 2
+      }}
+    >
       <Grid container justifyContent="space-between" alignItems="center">
         <Grid item>
           <SelectButtons />
