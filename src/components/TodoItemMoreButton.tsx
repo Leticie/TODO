@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -6,6 +6,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { TaskState } from "../types/types";
 import { apiSlice } from "../redux/features/api/apiSlice";
 import { TodoItemEditDialog } from "./TodoItemEditDialog";
+import { useDispatch } from "react-redux";
+import { finishTask, removeTask } from "../redux/features/tasks/tasksSlice";
 
 interface TodoItemMoreButtonI {
   todoItem: TaskState;
@@ -13,11 +15,15 @@ interface TodoItemMoreButtonI {
 
 export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
   const [deleteTask] = apiSlice.useDeleteTaskMutation();
-  const [completeTask] = apiSlice.useCompleteTaskMutation();
-  const [incompleteTask] = apiSlice.useIncompleteTaskMutation();
+  const [completeTask, { data: completeTaskResponse }] =
+    apiSlice.useCompleteTaskMutation();
+  const [incompleteTask, { data: incompleteTaskResponse }] =
+    apiSlice.useIncompleteTaskMutation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -29,6 +35,7 @@ export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
 
   const handleDelete = () => {
     deleteTask(todoItem);
+    dispatch(removeTask(todoItem))
     setAnchorEl(null);
   };
 
@@ -43,6 +50,18 @@ export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
     setEditDialogOpen(true);
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (completeTaskResponse !== undefined) {
+      dispatch(finishTask(completeTaskResponse));
+    }
+  }, [completeTaskResponse, dispatch]);
+
+  useEffect(() => {
+    if (incompleteTaskResponse !== undefined) {
+      dispatch(finishTask(incompleteTaskResponse));
+    }
+  }, [incompleteTaskResponse, dispatch]);
 
   const completeOption = todoItem.completed ? "Incomplete" : "Complete";
 
@@ -66,7 +85,11 @@ export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
         <MenuItem onClick={handleEdit}>Edit</MenuItem>
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
-      <TodoItemEditDialog open={editDialogOpen} setOpen={setEditDialogOpen} todoItem={todoItem}/>
+      <TodoItemEditDialog
+        open={editDialogOpen}
+        setOpen={setEditDialogOpen}
+        todoItem={todoItem}
+      />
     </>
   );
 };
