@@ -1,23 +1,24 @@
 import { Checkbox, Grid, Typography } from "@mui/material";
 import { TodoItemMoreButton } from "./TodoItemMoreButton";
+import { TaskState } from "../types/types";
 
 interface TodoItemI {
-  name: string;
-  completed: boolean;
+  todoItem: TaskState;
 }
 
-export const TodoItem = ({ name, completed }: TodoItemI) => {
+
+export const TodoItem = ({todoItem}: TodoItemI) => {
   return (
     <Grid
       container
-      sx={{ background: completed ? "green" : "yellow", padding: 1, border: 1, borderTop: 0 }}
+      sx={{ background: todoItem.completed ? "green" : "yellow", padding: 1, border: 1, borderTop: 0 }}
     >
       <Grid container item alignItems="center" justifyContent="space-between">
         <Checkbox />
         <Typography variant="h6" component="h4">
-          {name}
+          {todoItem.text}
         </Typography>
-        <TodoItemMoreButton />
+        <TodoItemMoreButton todoItem={todoItem}/>
       </Grid>
     </Grid>
   );

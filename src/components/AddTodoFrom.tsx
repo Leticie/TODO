@@ -1,18 +1,26 @@
 import { Button, Grid, TextField } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import { apiSlice } from "../redux/features/api/apiSlice";
 import { useAppDispatch } from "../hooks";
-import { useState } from "react";
 import { addTask } from "../redux/features/tasks/tasksSlice";
 
 export const AddTodoForm = () => {
-  const [name, setName] = useState<string>("");
+  const [postTask, { data, error }] = apiSlice.usePostTaskMutation();
+  const [input, setInput] = useState<string>("");
+
   const dispatch = useAppDispatch();
 
-  const handleSubmit = () => {
-    dispatch(
-      addTask({ id: name, text: name, completed: false, createdDate: +new Date() })
-    );
-    setName("")
-  };
+  const handleSubmit = useCallback(() => {
+    postTask(input);
+    setInput("");
+  }, [postTask, input]);
+
+  useEffect(() => {
+    if (data === undefined) {
+      return
+    }
+    dispatch(addTask(data));
+  }, [data, dispatch]);
 
   return (
     <Grid
@@ -28,14 +36,17 @@ export const AddTodoForm = () => {
           label="Name"
           variant="outlined"
           fullWidth
-          value={name}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setName(event.target.value);
-          }}
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
         />
       </Grid>
       <Grid item alignSelf="center">
-        <Button sx={{ width: 100 }} variant="contained" onClick={handleSubmit}>
+        <Button
+          sx={{ width: 100 }}
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={!input.length}
+        >
           Submit
         </Button>
       </Grid>

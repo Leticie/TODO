@@ -3,9 +3,21 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { TaskState } from "../types/types";
+import { apiSlice } from "../redux/features/api/apiSlice";
+import { TodoItemEditDialog } from "./TodoItemEditDialog";
 
-export const TodoItemMoreButton = () => {
+interface TodoItemMoreButtonI {
+  todoItem: TaskState;
+}
+
+export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
+  const [deleteTask] = apiSlice.useDeleteTaskMutation();
+  const [completeTask] = apiSlice.useCompleteTaskMutation();
+  const [incompleteTask] = apiSlice.useIncompleteTaskMutation();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -14,6 +26,25 @@ export const TodoItemMoreButton = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleDelete = () => {
+    deleteTask(todoItem);
+    setAnchorEl(null);
+  };
+
+  const handleCompleteChange = () => {
+    todoItem.completed
+      ? incompleteTask(todoItem.id)
+      : completeTask(todoItem.id);
+    setAnchorEl(null);
+  };
+
+  const handleEdit = () => {
+    setEditDialogOpen(true);
+    setAnchorEl(null);
+  };
+
+  const completeOption = todoItem.completed ? "Incomplete" : "Complete";
 
   return (
     <>
@@ -31,10 +62,11 @@ export const TodoItemMoreButton = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Done</MenuItem>
-        <MenuItem onClick={handleClose}>Edit</MenuItem>
-        <MenuItem onClick={handleClose}>Delete</MenuItem>
+        <MenuItem onClick={handleCompleteChange}>{completeOption}</MenuItem>
+        <MenuItem onClick={handleEdit}>Edit</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
+      <TodoItemEditDialog open={editDialogOpen} setOpen={setEditDialogOpen} todoItem={todoItem}/>
     </>
   );
 };
