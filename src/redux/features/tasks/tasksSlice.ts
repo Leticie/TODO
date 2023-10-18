@@ -1,17 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-export interface TaskState {
-  id: string;
-  text: string;
-  completed: boolean;
-  createdDate: number;
-}
+import { TaskState } from "../../../types/types";
 
 const initialState: TaskState[] = [];
 
 export const tasksSlice = createSlice({
-  name: "tasks",
+  name: "Tasks",
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<TaskState>) => {
