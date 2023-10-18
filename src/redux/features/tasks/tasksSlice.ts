@@ -5,7 +5,7 @@ import { TaskState } from "../../../types/types";
 const initialState: TaskState[] = [];
 
 export const tasksSlice = createSlice({
-  name: "Tasks",
+  name: "tasks",
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<TaskState>) => {
