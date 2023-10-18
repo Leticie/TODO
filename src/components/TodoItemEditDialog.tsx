@@ -8,7 +8,9 @@ import {
 } from "@mui/material";
 import { TaskState } from "../types/types";
 import { apiSlice } from "../redux/features/api/apiSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { renameTask } from "../redux/features/tasks/tasksSlice";
 
 interface TodoItemEditDialogI {
   open: boolean;
@@ -21,18 +23,27 @@ export const TodoItemEditDialog = ({
   setOpen,
   todoItem,
 }: TodoItemEditDialogI) => {
-  const [updateTextTask] = apiSlice.useUpdateTextTaskMutation();
+  const [updateTextTask, { data: updatedTextResponse }] =
+    apiSlice.useUpdateTextTaskMutation();
 
   const [editedItemName, setEditedItemName] = useState<string>(todoItem?.text);
+
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleEdit = () => {
-    updateTextTask({taskId: todoItem.id, updatedText: editedItemName});
+    updateTextTask({ taskId: todoItem.id, updatedText: editedItemName });
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (updatedTextResponse !== undefined) {
+      dispatch(renameTask(updatedTextResponse));
+    }
+  }, [updatedTextResponse, dispatch]);
 
   return (
     <Dialog open={open} onClose={handleClose}>

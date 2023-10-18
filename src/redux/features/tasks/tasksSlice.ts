@@ -31,10 +31,19 @@ export const tasksSlice = createSlice({
       console.log(stateWithoutTask)
       return stateWithoutTask;
     },
+    renameTask: (state, action: PayloadAction<TaskState>) => {
+      const index = state.findIndex((todo) => {
+        return todo.id === action.payload.id;
+      });
+      if (index !== -1) {
+        state[index] = action.payload;
+      }
+      return state;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addTask, addTasks, finishTask, removeTask} = tasksSlice.actions;
+export const { addTask, addTasks, finishTask, removeTask, renameTask} = tasksSlice.actions;
 
 export default tasksSlice.reducer;
