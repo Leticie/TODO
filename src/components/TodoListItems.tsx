@@ -6,32 +6,18 @@ import { useEffect } from "react";
 import { addTasks } from "../redux/features/tasks/tasksSlice";
 import { useAppSelector } from "../hooks";
 import { Typography, CircularProgress, Grid } from "@mui/material";
-import { TaskState } from "../types/types";
+import { getCompletedTodosTotal, getFilteredStoredTodos } from "../helpers/todoListItemsHelpers";
 
 export const TodoListItems = () => {
   const storedTodos = useAppSelector((state: RootState) => state.tasks);
   const filter = useAppSelector((state: RootState) => state.filter);
   const tasks = apiSlice.useGetTasksQuery();
 
-  const getFilteredStoredTodos = (storedTodos: TaskState[], filter: string) => {
-    if (filter === "all") {
-      return storedTodos;
-    }
-    if (filter === "completed") {
-      return storedTodos.filter((todo) => {
-        return !todo.completed;
-      });
-    }
-    return storedTodos.filter((todo) => {
-      return todo.completed;
-    });
-  };
+  const dispatch = useDispatch();
 
   const filteredStoredTodos = getFilteredStoredTodos(storedTodos, filter);
+  const completedTodosTotal = getCompletedTodosTotal(storedTodos)
 
-  const completedTodosTotal = storedTodos.filter((todo) => todo.completed);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (tasks.data === undefined) {
