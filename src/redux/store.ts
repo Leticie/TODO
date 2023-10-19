@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tasksReducer from "./features/tasks/tasksSlice";
+import filterReducer from "./features/filter/filterSlice"
 import { apiSlice } from "./features/api/apiSlice";
 
 export const store = configureStore({
   reducer: {
     tasks: tasksReducer,
+    filter: filterReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

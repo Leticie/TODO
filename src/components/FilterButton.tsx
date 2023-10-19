@@ -6,12 +6,17 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { ALL, DONE, PROGRESS } from "../constants/constants";
+import { useDispatch } from "react-redux";
+import { updateFilter } from "../redux/features/filter/filterSlice";
 
 export const FilterButton = () => {
   const [filter, setFilter] = useState<string>(ALL);
 
+  const dispatch = useDispatch()
+
   const handleFilterChange = (event: SelectChangeEvent) => {
     setFilter(event.target.value);
+    dispatch(updateFilter(event.target.value))
   };
 
   return (
