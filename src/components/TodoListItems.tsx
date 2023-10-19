@@ -5,15 +5,31 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { addTasks } from "../redux/features/tasks/tasksSlice";
 import { useAppSelector } from "../hooks";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress, Grid } from "@mui/material";
+import { TaskState } from "../types/types";
 
 export const TodoListItems = () => {
   const storedTodos = useAppSelector((state: RootState) => state.tasks);
+  const filter = useAppSelector((state: RootState) => state.filter);
   const tasks = apiSlice.useGetTasksQuery();
 
-  const completedTodos = storedTodos.filter(
-    (todo) => todo.completed
-  );
+  const getFilteredStoredTodos = (storedTodos: TaskState[], filter: string) => {
+    if (filter === "all") {
+      return storedTodos;
+    }
+    if (filter === "completed") {
+      return storedTodos.filter((todo) => {
+        return !todo.completed;
+      });
+    }
+    return storedTodos.filter((todo) => {
+      return todo.completed;
+    });
+  };
+
+  const filteredStoredTodos = getFilteredStoredTodos(storedTodos, filter);
+
+  const completedTodosTotal = storedTodos.filter((todo) => todo.completed);
 
   const dispatch = useDispatch();
 
@@ -25,11 +41,19 @@ export const TodoListItems = () => {
   }, [tasks.data, dispatch]);
 
   return (
-    <>
-      {storedTodos.map((todoItem) => (
-        <TodoItem key={todoItem.id} todoItem={todoItem} />
-      ))}
-      <Typography variant="h6" align="center" sx={{marginTop: 2}}>Completed: {completedTodos.length}</Typography>
-    </>
+    <Grid container justifyContent="center">
+      {tasks.isLoading ? (
+        <CircularProgress sx={{ marginTop: 5 }} />
+      ) : (
+        <>
+          {filteredStoredTodos.map((todoItem) => (
+            <TodoItem key={todoItem.id} todoItem={todoItem} />
+          ))}
+          <Typography variant="h6" align="center" sx={{ marginTop: 2 }}>
+            Completed: {completedTodosTotal.length}
+          </Typography>
+        </>
+      )}
+    </Grid>
   );
 };
