@@ -5,19 +5,21 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { addTasks } from "../redux/features/tasks/tasksSlice";
 import { useAppSelector } from "../hooks";
+import { Typography } from "@mui/material";
 
 export const TodoListItems = () => {
   const storedTodos = useAppSelector((state: RootState) => state.tasks);
   const tasks = apiSlice.useGetTasksQuery();
 
-  console.log(tasks.data, "be")
-  console.log(storedTodos, "stored")
+  const completedTodos = storedTodos.filter(
+    (todo) => todo.completed
+  );
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (tasks.data === undefined) {
-      return 
+      return;
     }
     dispatch(addTasks(tasks.data));
   }, [tasks.data, dispatch]);
@@ -27,6 +29,7 @@ export const TodoListItems = () => {
       {storedTodos.map((todoItem) => (
         <TodoItem key={todoItem.id} todoItem={todoItem} />
       ))}
+      <Typography variant="h6" align="center" sx={{marginTop: 2}}>Completed: {completedTodos.length}</Typography>
     </>
   );
 };
