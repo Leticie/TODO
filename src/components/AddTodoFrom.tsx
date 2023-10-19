@@ -5,7 +5,7 @@ import { useAppDispatch } from "../hooks";
 import { addTask } from "../redux/features/tasks/tasksSlice";
 
 export const AddTodoForm = () => {
-  const [postTask, { data, error }] = apiSlice.usePostTaskMutation();
+  const [postTask, { data }] = apiSlice.usePostTaskMutation();
   const [input, setInput] = useState<string>("");
 
   const dispatch = useAppDispatch();

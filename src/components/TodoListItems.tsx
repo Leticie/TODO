@@ -35,7 +35,7 @@ export const TodoListItems = () => {
           {filteredStoredTodos.map((todoItem) => (
             <TodoItem key={todoItem.id} todoItem={todoItem} />
           ))}
-          <Typography variant="h6" align="center" sx={{ marginTop: 2 }}>
+          <Typography variant="button" align="center" sx={{ marginTop: 2 }}>
             Completed: {completedTodosTotal.length}
           </Typography>
         </>

@@ -12,16 +12,20 @@ import { updateFilter } from "../redux/features/filter/filterSlice";
 export const FilterButton = () => {
   const [filter, setFilter] = useState<string>(ALL);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleFilterChange = (event: SelectChangeEvent) => {
     setFilter(event.target.value);
-    dispatch(updateFilter(event.target.value))
+    dispatch(updateFilter(event.target.value));
   };
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <Select value={filter} onChange={handleFilterChange}>
+      <Select
+        value={filter}
+        onChange={handleFilterChange}
+        sx={{ color: "white" }}
+      >
         <MenuItem value={ALL}>Show all</MenuItem>
         <MenuItem value={PROGRESS}>Show in progress</MenuItem>
         <MenuItem value={DONE}>Show done</MenuItem>

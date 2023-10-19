@@ -17,17 +17,17 @@ export const SelectButtons = () => {
   return (
     <Grid
       container
-      sx={{ border: 1, borderRadius: 1, marginLeft: 1, width: "auto" }}
+      sx={{ border: 1, borderRadius: 1, marginLeft: 1, width: "auto", color: "#314e82" }}
       justifyContent="space-between"
     >
       <Grid item sx={{ borderRight: 1 }}>
-        <Checkbox />
+        <Checkbox sx={{color: "white"}}/>
       </Grid>
       <Grid item>
         <IconButton
           onClick={handleButtonClick}
         >
-          <ArrowDropDownIcon />
+          <ArrowDropDownIcon/>
         </IconButton>
         <Menu
           anchorEl={anchorEl}
