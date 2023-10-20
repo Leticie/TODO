@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { TaskState } from "../../../types/types";
+import { getStateWithModifiedTask, getStateWithRemovedTask } from "../../../helpers/taskSliceHelpers";
 
 const initialState: TaskState[] = [];
 
@@ -9,41 +10,27 @@ export const tasksSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<TaskState>) => {
-      state.unshift(action.payload); // FIX THIS VIA RETURN (immutable)
+      state.unshift(action.payload);
     },
     addTasks: (state, action: PayloadAction<TaskState[]>) => {
       return action.payload;
     },
     finishTask: (state, action: PayloadAction<TaskState>) => {
-      const index = state.findIndex((todo) => {
-        return todo.id === action.payload.id;
-      });
-      if (index !== -1) {
-        state[index] = action.payload;
-      }
-      return state;
+      const stateWithFinishedTask = getStateWithModifiedTask(state, action.payload);
+      return stateWithFinishedTask;
     },
     removeTask: (state, action: PayloadAction<TaskState>) => {
-      const stateWithoutTask = state.filter((todo) => {
-        console.log(action.payload)
-        return todo.id !== action.payload?.id;
-      });
-      console.log(stateWithoutTask)
+      const stateWithoutTask = getStateWithRemovedTask(state, action.payload)
       return stateWithoutTask;
     },
     renameTask: (state, action: PayloadAction<TaskState>) => {
-      const index = state.findIndex((todo) => {
-        return todo.id === action.payload.id;
-      });
-      if (index !== -1) {
-        state[index] = action.payload;
-      }
-      return state;
+      const stateWithRenamedTask = getStateWithModifiedTask(state, action.payload)
+      return stateWithRenamedTask
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { addTask, addTasks, finishTask, removeTask, renameTask} = tasksSlice.actions;
+export const { addTask, addTasks, finishTask, removeTask, renameTask } =
+  tasksSlice.actions;
 
 export default tasksSlice.reducer;
