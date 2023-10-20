@@ -5,7 +5,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useState } from "react";
-import { ALL, DONE, PROGRESS } from "../constants/constants";
+import { ALL, COMPLETED, INCOMPLETED } from "../constants/constants";
 import { useDispatch } from "react-redux";
 import { updateFilter } from "../redux/features/filter/filterSlice";
 import { getFilterButtonStyles } from "../styles/FilterButtonStyles";
@@ -30,8 +30,8 @@ export const FilterButton = () => {
         sx={styles.select}
       >
         <MenuItem value={ALL}>Show all</MenuItem>
-        <MenuItem value={PROGRESS}>Show in progress</MenuItem>
-        <MenuItem value={DONE}>Show done</MenuItem>
+        <MenuItem value={INCOMPLETED}>Show in progress</MenuItem>
+        <MenuItem value={COMPLETED}>Show done</MenuItem>
       </Select>
     </FormControl>
   );

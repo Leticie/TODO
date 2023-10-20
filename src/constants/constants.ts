@@ -1,4 +1,4 @@
 // FilterButton constants
 export const ALL = "all";
-export const PROGRESS = "completed";
-export const DONE = "incompleted";
+export const COMPLETED = "completed";
+export const INCOMPLETED = "incompleted";
