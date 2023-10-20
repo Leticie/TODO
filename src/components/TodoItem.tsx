@@ -18,7 +18,7 @@ export const TodoItem = ({ todoItem }: TodoItemI) => {
       }}
     >
       <Grid container item alignItems="center" justifyContent="space-between">
-        <Grid item>
+        <Grid item xs={11}>
           <Typography
             variant="body1"
             color={todoItem.completed ? "grey" : "black"}
@@ -26,7 +26,7 @@ export const TodoItem = ({ todoItem }: TodoItemI) => {
             {todoItem.text}
           </Typography>
         </Grid>
-        <Grid item>
+        <Grid item xs={1}>
           <TodoItemMoreButton todoItem={todoItem} />
         </Grid>
       </Grid>

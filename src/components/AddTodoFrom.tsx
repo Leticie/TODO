@@ -1,5 +1,5 @@
 import { Button, Grid, TextField } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { apiSlice } from "../redux/features/api/apiSlice";
 import { useAppDispatch } from "../hooks";
 import { addTask } from "../redux/features/tasks/tasksSlice";
@@ -10,10 +10,10 @@ export const AddTodoForm = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = () => {
     postTask(input);
     setInput("");
-  }, [postTask, input]);
+  };
 
   useEffect(() => {
     if (data === undefined) {
