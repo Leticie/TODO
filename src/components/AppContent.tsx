@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 import { AddTodoForm } from "./AddTodoFrom";
-import { TodoListOverview } from "./TodoListOverview";
+import { TodoListTable } from "./TodoListTable";
 
 export const AppContent = () => {
   return (
@@ -16,7 +16,7 @@ export const AppContent = () => {
         Todo list
       </Typography>
       <AddTodoForm />
-      <TodoListOverview />
+      <TodoListTable />
     </Container>
   );
 };

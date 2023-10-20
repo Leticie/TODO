@@ -8,7 +8,7 @@ import { useAppSelector } from "../hooks";
 import { Typography, CircularProgress, Grid } from "@mui/material";
 import { getCompletedTodosTotal, getFilteredStoredTodos } from "../helpers/todoListItemsHelpers";
 
-export const TodoListItems = () => {
+export const TodoListTableContent = () => {
   const storedTodos = useAppSelector((state: RootState) => state.tasks);
   const filter = useAppSelector((state: RootState) => state.filter);
   const tasks = apiSlice.useGetTasksQuery();
