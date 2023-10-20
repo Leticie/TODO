@@ -11,6 +11,7 @@ import {
   getFilteredStoredTodos,
 } from "../helpers/todoListItemsHelpers";
 import { getTodoListContentStyles } from "../styles/TodoListTableContentStyles";
+import { handleError } from "../redux/features/errorHandler/errorHandlerSlice";
 
 export const TodoListTableContent = () => {
   const storedTodos = useAppSelector((state: RootState) => state.tasks);
@@ -25,11 +26,14 @@ export const TodoListTableContent = () => {
   const completedTodosTotal = getCompletedTodosTotal(storedTodos);
 
   useEffect(() => {
+    if (tasks.isError) {
+      dispatch(handleError(true));
+    }
     if (tasks.data === undefined) {
       return;
     }
     dispatch(addTasks(tasks.data));
-  }, [tasks.data, dispatch]);
+  }, [tasks.data, tasks.isError, dispatch]);
 
   return (
     <Grid container justifyContent="center">

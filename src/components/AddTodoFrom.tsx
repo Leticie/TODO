@@ -4,14 +4,16 @@ import { apiSlice } from "../redux/features/api/apiSlice";
 import { useAppDispatch } from "../hooks";
 import { addTask } from "../redux/features/tasks/tasksSlice";
 import { getAddTodoFormStyles } from "../styles/AddTodoFormStyles";
+import { handleError } from "../redux/features/errorHandler/errorHandlerSlice";
 
 export const AddTodoForm = () => {
-  const [postTask, { data }] = apiSlice.usePostTaskMutation();
+  const [postTask, { data, isError }] = apiSlice.usePostTaskMutation();
+
   const [input, setInput] = useState<string>("");
 
   const dispatch = useAppDispatch();
 
-  const styles = getAddTodoFormStyles()
+  const styles = getAddTodoFormStyles();
 
   const handleSubmit = () => {
     postTask(input);
@@ -19,11 +21,14 @@ export const AddTodoForm = () => {
   };
 
   useEffect(() => {
+    if (isError) {
+      dispatch(handleError(true));
+    }
     if (data === undefined) {
-      return
+      return;
     }
     dispatch(addTask(data));
-  }, [data, dispatch]);
+  }, [data, isError, dispatch]);
 
   return (
     <Grid

@@ -11,6 +11,7 @@ import { apiSlice } from "../redux/features/api/apiSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { renameTask } from "../redux/features/tasks/tasksSlice";
+import { handleError } from "../redux/features/errorHandler/errorHandlerSlice";
 
 interface TodoItemEditDialogI {
   open: boolean;
@@ -23,7 +24,7 @@ export const TodoItemEditDialog = ({
   setOpen,
   todoItem,
 }: TodoItemEditDialogI) => {
-  const [updateTextTask, { data: updatedTextResponse }] =
+  const [updateTextTask, { data: updatedTextResponse, isError }] =
     apiSlice.useUpdateTextTaskMutation();
 
   const [editedItemName, setEditedItemName] = useState<string>(todoItem?.text);
@@ -40,10 +41,13 @@ export const TodoItemEditDialog = ({
   };
 
   useEffect(() => {
+    if (isError) {
+      dispatch(handleError(true));
+    }
     if (updatedTextResponse !== undefined) {
       dispatch(renameTask(updatedTextResponse));
     }
-  }, [updatedTextResponse, dispatch]);
+  }, [updatedTextResponse, isError, dispatch]);
 
   return (
     <Dialog open={open} onClose={handleClose}>

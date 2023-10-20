@@ -19,7 +19,7 @@ export const TodoItem = ({ todoItem }: TodoItemI) => {
         <Grid item xs={11}>
           <Typography
             variant="body1"
-            color={todoItem.completed ? "grey" : "black"}
+            color={todoItem.completed ? "#7a7a7a" : "black"}
           >
             {todoItem.text}
           </Typography>

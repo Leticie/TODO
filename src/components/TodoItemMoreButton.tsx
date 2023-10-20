@@ -8,6 +8,7 @@ import { apiSlice } from "../redux/features/api/apiSlice";
 import { TodoItemEditDialog } from "./TodoItemEditDialog";
 import { useDispatch } from "react-redux";
 import { finishTask, removeTask } from "../redux/features/tasks/tasksSlice";
+import { handleError } from "../redux/features/errorHandler/errorHandlerSlice";
 
 interface TodoItemMoreButtonI {
   todoItem: TaskState;
@@ -15,10 +16,12 @@ interface TodoItemMoreButtonI {
 
 export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
   const [deleteTask] = apiSlice.useDeleteTaskMutation();
-  const [completeTask, { data: completeTaskResponse }] =
+  const [completeTask, { data: completeTaskResponse, isError: completeTaskError }] =
     apiSlice.useCompleteTaskMutation();
-  const [incompleteTask, { data: incompleteTaskResponse }] =
-    apiSlice.useIncompleteTaskMutation();
+  const [
+    incompleteTask,
+    { data: incompleteTaskResponse, isError: incompleteTaskError },
+  ] = apiSlice.useIncompleteTaskMutation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -35,7 +38,7 @@ export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
 
   const handleDelete = () => {
     deleteTask(todoItem);
-    dispatch(removeTask(todoItem))
+    dispatch(removeTask(todoItem));
     setAnchorEl(null);
   };
 
@@ -52,16 +55,22 @@ export const TodoItemMoreButton = ({ todoItem }: TodoItemMoreButtonI) => {
   };
 
   useEffect(() => {
+    if (completeTaskError) {
+      dispatch(handleError(true));
+    }
     if (completeTaskResponse !== undefined) {
       dispatch(finishTask(completeTaskResponse));
     }
-  }, [completeTaskResponse, dispatch]);
+  }, [completeTaskResponse, completeTaskError, dispatch]);
 
   useEffect(() => {
+    if (incompleteTaskError) {
+      dispatch(handleError(true));
+    }
     if (incompleteTaskResponse !== undefined) {
       dispatch(finishTask(incompleteTaskResponse));
     }
-  }, [incompleteTaskResponse, dispatch]);
+  }, [incompleteTaskResponse, incompleteTaskError, dispatch]);
 
   const completeOption = todoItem.completed ? "Incomplete" : "Complete";
 
