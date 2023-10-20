@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import { apiSlice } from "../redux/features/api/apiSlice";
 import { useAppDispatch } from "../hooks";
 import { addTask } from "../redux/features/tasks/tasksSlice";
+import { getAddTodoFormStyles } from "../styles/AddTodoFormStyles";
 
 export const AddTodoForm = () => {
   const [postTask, { data }] = apiSlice.usePostTaskMutation();
   const [input, setInput] = useState<string>("");
 
   const dispatch = useAppDispatch();
+
+  const styles = getAddTodoFormStyles()
 
   const handleSubmit = () => {
     postTask(input);
@@ -29,7 +32,7 @@ export const AddTodoForm = () => {
       spacing={2}
       flexDirection="row"
       justifyContent="center"
-      sx={{ marginY: 4 }}
+      sx={styles.container}
     >
       <Grid item>
         <TextField
@@ -42,7 +45,7 @@ export const AddTodoForm = () => {
       </Grid>
       <Grid item alignSelf="center">
         <Button
-          sx={{ width: 100 }}
+          sx={styles.button}
           variant="contained"
           onClick={handleSubmit}
           disabled={!input.length}

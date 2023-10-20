@@ -6,18 +6,23 @@ import { useEffect } from "react";
 import { addTasks } from "../redux/features/tasks/tasksSlice";
 import { useAppSelector } from "../hooks";
 import { Typography, CircularProgress, Grid } from "@mui/material";
-import { getCompletedTodosTotal, getFilteredStoredTodos } from "../helpers/todoListItemsHelpers";
+import {
+  getCompletedTodosTotal,
+  getFilteredStoredTodos,
+} from "../helpers/todoListItemsHelpers";
+import { getTodoListContentStyles } from "../styles/TodoListTableContentStyles";
 
 export const TodoListTableContent = () => {
   const storedTodos = useAppSelector((state: RootState) => state.tasks);
   const filter = useAppSelector((state: RootState) => state.filter);
   const tasks = apiSlice.useGetTasksQuery();
 
+  const styles = getTodoListContentStyles();
+
   const dispatch = useDispatch();
 
   const filteredStoredTodos = getFilteredStoredTodos(storedTodos, filter);
-  const completedTodosTotal = getCompletedTodosTotal(storedTodos)
-
+  const completedTodosTotal = getCompletedTodosTotal(storedTodos);
 
   useEffect(() => {
     if (tasks.data === undefined) {
@@ -29,13 +34,13 @@ export const TodoListTableContent = () => {
   return (
     <Grid container justifyContent="center">
       {tasks.isLoading ? (
-        <CircularProgress sx={{ marginTop: 5 }} />
+        <CircularProgress sx={styles.spinner} />
       ) : (
         <>
           {filteredStoredTodos.map((todoItem) => (
             <TodoItem key={todoItem.id} todoItem={todoItem} />
           ))}
-          <Typography variant="button" align="center" sx={{ marginTop: 2 }}>
+          <Typography variant="button" align="center" sx={styles.text}>
             Completed: {completedTodosTotal.length}
           </Typography>
         </>

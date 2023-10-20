@@ -8,9 +8,12 @@ import { useState } from "react";
 import { ALL, DONE, PROGRESS } from "../constants/constants";
 import { useDispatch } from "react-redux";
 import { updateFilter } from "../redux/features/filter/filterSlice";
+import { getFilterButtonStyles } from "../styles/FilterButtonStyles";
 
 export const FilterButton = () => {
   const [filter, setFilter] = useState<string>(ALL);
+
+  const styles = getFilterButtonStyles()
 
   const dispatch = useDispatch();
 
@@ -20,11 +23,11 @@ export const FilterButton = () => {
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
+    <FormControl sx={styles.container}>
       <Select
         value={filter}
         onChange={handleFilterChange}
-        sx={{ color: "white" }}
+        sx={styles.select}
       >
         <MenuItem value={ALL}>Show all</MenuItem>
         <MenuItem value={PROGRESS}>Show in progress</MenuItem>

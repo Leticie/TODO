@@ -1,23 +1,21 @@
 import { Grid, Typography } from "@mui/material";
 import { TodoItemMoreButton } from "./TodoItemMoreButton";
 import { TaskState } from "../types/types";
+import { getTodoItemStyles } from "../styles/TodoItemStyles";
 
 interface TodoItemI {
   todoItem: TaskState;
 }
 
 export const TodoItem = ({ todoItem }: TodoItemI) => {
+  const styles = getTodoItemStyles(todoItem.completed);
+
   return (
     <Grid
       container
-      sx={{
-        background: todoItem.completed ? "#f0f4ff" : "#f2da52",
-        padding: 1,
-        borderBottom: 1,
-        borderColor: "#9d9d9e",
-      }}
+      sx={styles.container}
     >
-      <Grid container item alignItems="center" justifyContent="space-between">
+      <Grid container item alignItems="center">
         <Grid item xs={11}>
           <Typography
             variant="body1"
